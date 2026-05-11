@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawPals Pet Shop - Everything Your Pet Needs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff6b6b;
+            --secondary-color: #4ecdc4;
+            --accent-color: #45b7d1;
+            --dark-color: #2c3e50;
+            --light-color: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-hero {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-hero:hover {
+            background-color: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--dark-color);
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .category-tabs {
+            margin-bottom: 2rem;
+        }
+
+        .nav-pills .nav-link {
+            border-radius: 50px;
+            margin: 0 5px;
+            padding: 10px 25px;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .nav-pills .nav-link:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .product-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            height: 200px;
+            background-color: var(--light-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--secondary-color);
+        }
+
+        .product-title {
+            font-weight: bold;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .btn-add-cart {
+            background-color: var(--secondary-color);
+            border: none;
+            border-radius: 50px;
+            padding: 8px 20px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-add-cart:hover {
+            background-color: #3db8af;
+            transform: translateY(-1px);
+        }
+
+        .cart-badge {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 1050;
+            overflow-y: auto;
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1040;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .cart-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .cart-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem;
+        }
+
+        .cart-item {
+            border-bottom: 1px solid #eee;
+            padding: 1rem;
+        }
+
+        .cart-total {
+            background-color: var(--light-color);
+            padding: 1rem;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer h5 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .footer a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: var(--secondary-color);
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+            
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+            
+            .nav-pills .nav-link {
+                margin: 5px 2px;
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-paw"></i> PawPals
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#products">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+                <button class="btn btn-outline-light position-relative" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                    <span id="cart-count" class="cart-badge">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="container">
+            <h1>🐾 Welcome to PawPals</h1>
+            <p>Your one-stop shop for everything your furry friends need!</p>
+            <button class="btn btn-hero btn-lg" onclick="document.getElementById('products').scrollIntoView()">
+                Shop Now <i class="fas fa-arrow-down ms-2"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-5">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Products</h2>
+                <p class="lead">Premium quality products for your beloved pets</p>
+            </div>
+
+            <!-- Category Tabs -->
+            <div class="category-tabs">
+                <ul class="nav nav-pills justify-content-center" id="categoryTabs">
+                    <li class="nav-item">
+                        <button class="nav-link active" data-category="all">All Products</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-category="food">Food</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-category="toys">Toys</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-category="accessories">Accessories</button>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="row" id="product-grid">
+                <!-- Products will be dynamically loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5><i class="fas fa-paw"></i> PawPals</h5>
+                    <p>Providing quality products for your pets since 2020. We care about your furry family members as much as you do.</p>
+                </div>
+                <div class="col-md-2">
+                    <h5>Shop</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Dog Food</a></li>
+                        <li><a href="#">Cat Food</a></li>
+                        <li><a href="#">Toys</a></li>
+                        <li><a href="#">Accessories</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h5>Support</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Connect With Us</h5>
+                    <div class="mb-3">
+                        <a href="#" class="me-3"><i class="fab fa-facebook fa-2x"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-instagram fa-2x"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-twitter fa-2x"></i></a>
+                    </div>
+                    <p>📧 hello@pawpals.com<br>📞 1-800-PAWPALS</p>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p>&copy; 2024 PawPals Pet Shop. Made with ❤️ for pets and their humans.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header d-flex justify-content-between align-items-center">
+            <h4><i class="fas fa-shopping-cart"></i> Your Cart</h4>
+            <button class="btn btn-outline-light btn-sm" onclick="toggleCart()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="cart-items">
+            <div class="text-center p-4">
+                <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                <p class="text-muted">Your cart is empty</p>
+            </div>
+        </div>
+        <div class="cart-total" id="cart-total" style="display: none;">
+            Total: $<span id="total-amount">0.00</span>
+        </div>
+        <div class="p-3" id="checkout-section" style="display: none;">
+            <button class="btn btn-primary w-100 btn-lg" onclick="checkout()">
+                Proceed to Checkout <i class="fas fa-arrow-right ms-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Product data
+        const products = [
+            {
+                id: 1,
+                name: "Premium Dog Food",
+                price: 29.99,
+                category: "food",
+                icon: "🦴",
+                description: "High-quality nutrition for adult dogs"
+            },
+            {
+                id: 2,
+                name: "Cat Treats",
+                price: 12.99,
+                category: "food",
+                icon: "🐟",
+                description: "Delicious salmon-flavored treats"
+            },
+            {
+                id: 3,
+                name: "Squeaky Ball",
+                price: 8.99,
+                category: "toys",
+                icon: "🎾",
+                description: "Durable rubber ball for fetch"
+            },
+            {
+                id: 4,
+                name: "Cat Feather Wand",
+                price: 15.99,
+                category: "toys",
+                icon: "🪶",
+                description: "Interactive feather toy for cats"
+            },
+            {
+                id: 5,
+                name: "Dog Collar",
+                price: 19.99,
+                category: "accessories",
+                icon: "🦮",
+                description: "Adjustable leather collar"
+            },
+            {
+                id: 6,
+                name: "Cat Bed",
+                price: 34.99,
+                category: "accessories",
+                icon: "🛏️",
+                description: "Cozy cushioned bed for cats"
+            },
+            {
+                id: 7,
+                name: "Puppy Training Treats",
+                price: 16.99,
+                category: "food",
+                icon: "🍖",
+                description: "Perfect for training sessions"
+            },
+            {
+                id: 8,
+                name: "Rope Toy",
+                price: 11.99,
+                category: "toys",
+                icon: "🪢",
+                description: "Natural cotton rope for chewing"
+            },
+            {
+                id: 9,
+                name: "Pet Carrier",
+                price: 45.99,
+                category: "accessories",
+                icon: "🧳",
+                description: "Comfortable travel carrier"
+            }
+        ];
+
+        // Cart functionality
+        let cart = [];
+
+        function renderProducts(category = 'all') {
+            const productGrid = document.getElementById('product-grid');
+            const filteredProducts = category === 'all' ? products : products.filter(p => p.category === category);
+            
+            productGrid.innerHTML = filteredProducts.map(product => `
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="card product-card h-100">
+                        <div class="product-image">
+                            ${product.icon}
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="product-title">${product.name}</h5>
+                            <p class="card-text text-muted">${product.description}</p>
+                            <div class="mt-auto">
+                                <div class="product-price">$${product.price}</div>
+                                <button class="btn btn-add-cart" onclick="addToCart(${product.id})">
+                                    <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            
+            updateCartUI();
+            showCartNotification(product.name);
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+        }
+
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    updateCartUI();
+                }
+            }
+        }
+
+        function updateCartUI() {
+            const cartCount = document.getElementById('cart-count');
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            const checkoutSection = document.getElementById('checkout-section');
+            const totalAmount = document.getElementById('total-amount');
+            
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            cartCount.textContent = totalItems;
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="text-center p-4">
+                        <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Your cart is empty</p>
+                    </div>
+                `;
+                cartTotal.style.display = 'none';
+                checkoutSection.style.display = 'none';
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">${item.name}</h6>
+                                <small class="text-muted">$${item.price} each</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${item.id}, -1)">-</button>
+                                <span class="mx-2">${item.quantity}</span>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${item.id}, 1)">+</button>
+                                <button class="btn btn-sm btn-outline-danger ms-2" onclick="removeFromCart(${item.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-end mt-2">
+                            <strong>$${(item.price * item.quantity).toFixed(2)}</strong>
+                        </div>
+                    </div>
+                `).join('');
+                
+                cartTotal.style.display = 'block';
+                checkoutSection.style.display = 'block';
+                totalAmount.textContent = totalPrice.toFixed(2);
+            }
+        }
+
+        function toggleCart() {
+            const cartSidebar = document.getElementById('cart-sidebar');
+            const cartOverlay = document.querySelector('.cart-overlay');
+            
+            cartSidebar.classList.toggle('open');
+            cartOverlay.classList.toggle('show');
+        }
+
+        function showCartNotification(productName) {
+            // Create a simple notification
+            const notification = document.createElement('div');
+            notification.className = 'alert alert-success position-fixed';
+            notification.style.cssText = 'top: 100px; right: 20px; z-index: 9999; min-width: 300px;';
+            notification.innerHTML = `
+                <i class="fas fa-check-circle me-2"></i>
+                ${productName} added to cart!
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function checkout() {
+            if (cart.length === 0) return;
+            
+            alert(`Thank you for your order! Total: $${cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}`);
+            cart = [];
+            updateCartUI();
+            toggleCart();
+        }
+
+        // Category filtering
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryTabs = document.querySelectorAll('#categoryTabs .nav-link');
+            
+            categoryTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    categoryTabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Filter products
+                    const category = this.getAttribute('data-category');
+                    renderProducts(category);
+                });
+            });
+            
+            // Initial render
+            renderProducts();
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Close cart when clicking outside
+        document.addEventListener('click', function(e) {
+            const cartSidebar = document.getElementById('cart-sidebar');
+            const cartButton = e.target.closest('[onclick="toggleCart()"]');
+            
+            if (!cartSidebar.contains(e.target) && !cartButton && cartSidebar.classList.contains('open')) {
+                toggleCart();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96ae3e0384b01194',t:'MTc1NDQ4MDI0Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
